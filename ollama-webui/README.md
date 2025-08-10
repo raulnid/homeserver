@@ -1,0 +1,1 @@
+Con solamente usar `docker-compose up -d` ya tendrás la UI Web funcionando y ollama por detrás, podrás descargar modelos directamente desde la web o usando un script `entrypoint.sh` que descargue con ollama los modelos que necesites.
