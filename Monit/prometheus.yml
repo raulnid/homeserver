@@ -1,0 +1,28 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'node_local'
+    static_configs:
+      - targets: ['172.16.0.2:9100']   # Máquina local (Ubuntu Server)
+
+  - job_name: 'node_remote'
+    static_configs:
+      - targets: ['172.16.0.1:9100']   # Máquina remota (Oracle Linux)
+
+  - job_name: 'blackbox'
+    metrics_path: /probe
+    params:
+      module: [icmp]  # Ping
+    static_configs:
+      - targets:
+          - 172.16.0.1   # IP remota
+          - 172.16.0.2   # IP local
+          - 8.8.8.8
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 172.16.0.2:9115  # Blackbox exporter (local)
